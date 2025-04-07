@@ -1,5 +1,5 @@
 {
-  "name": "aula16",
+  "name": "projetoagenda",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.2",
     "connect-flash": "^0.1.1",
     "connect-mongo": "^5.1.0",
     "core-js": "^3.40.0",
