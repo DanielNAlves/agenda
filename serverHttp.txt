@@ -1,0 +1,80 @@
+# BLOCO HTTP
+server {
+	listen 80;
+	listen [::]:80;
+
+	server_name   (sernver_name or ip);
+
+	# Add index.php to the list if you are using PHP
+	index index.html index.htm index.nginx-debian.html index.php;
+
+	location = /favicon.ico { access_log off; log_not_found off; }
+
+	location / {
+		proxy_pass http://localhost:3000;
+		proxy_http_version 1.1;
+		proxy_set_header Upgrade $http_upgrade;
+		proxy_set_header Connection 'upgrade';
+		proxy_set_header Host $host;
+		proxy_cache_bypass $http_upgrade;
+	}
+
+	location ~ /\.ht {
+		deny all;
+	}
+
+	location ~ /\. {
+		access_log off;
+		log_not_found off;
+		deny all;
+	}
+
+	gzip on;
+	gzip_disable "msie6";
+
+	gzip_comp_level 6;
+	gzip_min_length 1100;
+	gzip_buffers 4 32k;
+	gzip_proxied any;
+	gzip_types
+		text/plain
+		text/css
+		text/js
+		text/xml
+		text/javascript
+		application/javascript
+		application/x-javascript
+		application/json
+		application/xml
+		application/rss+xml
+		image/svg+xml;
+
+	access_log off;
+	error_log   /var/log/nginx/(sernver_name or ip)-error.log;
+}
+
+# BLOCO HTTPS
+server {
+	listen 443 ssl;
+	listen [::]:443 ssl;
+
+	server_name (sernver_name or ip);
+
+	ssl_certificate /etc/nginx/ssl/selfsigned.crt;
+	ssl_certificate_key /etc/nginx/ssl/selfsigned.key;
+
+	ssl_protocols TLSv1.2 TLSv1.3;
+	ssl_ciphers HIGH:!aNULL:!MD5;
+
+	location / {
+		proxy_pass http://localhost:3000;
+		proxy_http_version 1.1;
+		proxy_set_header Upgrade $http_upgrade;
+		proxy_set_header Connection 'upgrade';
+		proxy_set_header Host $host;
+		proxy_cache_bypass $http_upgrade;
+	}
+
+	access_log /var/log/nginx/agenda-ssl-access.log;
+	error_log  /var/log/nginx/agenda-ssl-error.log;
+}
